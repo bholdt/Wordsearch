@@ -1,0 +1,45 @@
+<html>
+<head>
+ <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+ <script src="ThemesViewModel.js"></script>
+</head>
+<body>
+<div id="content">
+<div id="themeSelectionDiv">
+<select data-bind="options: themes,
+ optionsCaption: 'Choose a theme...',
+ optionsText: 'title',
+ value: chosenTheme"></select>
+</div>
+<div id="chosenThemeDiv" data-bind="with: chosenTheme">
+	<h1 data-bind="text: title"></h1>
+	<div id="themeWords" data-bind="foreach: words">
+		<input type="text" data-bind="value: $data" /><br/>
+	</div>
+	<button data-bind="click: addWord">+ Word</button>
+</div>
+
+<input id="emailAddress" placeHolder="Your email address"/>
+<button>Send Me The Wordsearch</button>
+</div>
+</body>
+<script>
+    var vm = new ThemeListViewModel()
+	ko.applyBindings(vm);
+	vm.loadThemes();
+</script>
+<style>
+#content {
+ width: 100%;
+}
+
+#chosenThemeDiv {
+   width: 300px;
+   height: 600px;
+   margin: 20px;
+   padding: 50px;
+   border-color: #000;
+   border-width: 3px;
+}
+</style>
+</html>
