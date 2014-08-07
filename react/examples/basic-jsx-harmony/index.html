@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Basic Example with JSX with Harmony</title>
+    <link rel="stylesheet" href="../shared/css/base.css" />
+  </head>
+  <body>
+    <h1>Basic Example with JSX with Harmony</h1>
+    <div id="container">
+      <p>
+        To install React, follow the instructions on
+        <a href="http://www.github.com/facebook/react/">GitHub</a>.
+      </p>
+      <p>
+        If you can see this, React is not working right.
+        If you checked out the source from GitHub make sure to run <code>grunt</code>.
+      </p>
+    </div>
+    <h4>Example Details</h4>
+    <p>This is written with JSX with Harmony (ES6) syntax and transformed in the browser.<p>
+    <p>
+      Learn more about React at
+      <a href="http://facebook.github.io/react" target="_blank">facebook.github.io/react</a>.
+    </p>
+    <script src="../../build/react.js"></script>
+    <script src="../../build/JSXTransformer.js"></script>
+    <script type="text/jsx;harmony=true">
+      /**
+       * @jsx React.DOM
+       */
+      var WordList = React.createClass({
+	    
+		render: function(){
+			var words = this.props.words;
+			return <p>{words}</p>
+		}
+	  });
+	  
+	    
+	  var Wordsearch = React.createClass({
+        render() {
+          return (
+		  <div><h1>{title}</h1>
+			<p><span>{words}</span></p>
+			<p>{image}</p>
+		  </div>);
+        }
+      });
+	  
+	  
+      
+        React.renderComponent(
+          <Wordsearch title='test' theme='duck' words='test,fsdf,sdfsd'/>,
+          document.getElementById('container')
+        );
+		
+      
+    </script>
+  </body>
+</html>
