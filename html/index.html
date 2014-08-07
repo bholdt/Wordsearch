@@ -33,52 +33,57 @@
 	  
 	<div class="row">
 		<div class="col-md-12">
-			<div class="dropdown form-group">
-			  <button class="btn btn-default dropdown-toggle" style="width: 100%;" type="button" id="dropdownMenu1" data-toggle="dropdown">
-				Choose A Theme
-				<span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" style="width: 100%;" role="menu" aria-labelledby="dropdownMenu1">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-			  </ul>
-			</div>
+			
 		</div>
 	</div>
 	
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
           <div class="panel panel-info">
 		   <div class="panel-heading">
 				<h3 class="panel-title">Details</h3>
 			</div>
 			<div class="panel-body">
-				
 				<div class="form-group">
-				<input type="text" class="form-control" id="title" placeholder="Title">
+					<div class="dropdown">
+					  <button class="btn btn-default dropdown-toggle" style="width: 100%;" type="button" id="dropdownMenu1" data-toggle="dropdown">
+						Choose A Theme
+						<span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" style="width: 100%;" role="menu" aria-labelledby="dropdownMenu1">
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+					  </ul>
+					</div>
 				</div>
 				<div class="form-group">
-				<textarea rows=20 class="form-control" id="words" placeholder="Enter Words" ></textarea>
+					<input type="text" class="form-control" id="title" placeholder="Title">
+				</div>
+				<div class="form-group">
+					<textarea rows=15 class="form-control" id="words" placeholder="Enter Words" ></textarea>
+				</div>
+				<div class="form-group">
+					<input type="email" class="form-control" id="email" placeholder="Email Address" />
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary form-control">Send Me This Wordsearch</button>
 				</div>
 			</div>
 		  </div>
         </div>
-		<div class="col-md-8">
-		
-				<img src="http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg" class="img-responsive" />
-
+		<div class="col-md-7">
+			<div style="text-align: center;">
+				<!-- <img src="http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg" style="display: inline-block;" class="img-responsive" />-->
+				
+				<img src="http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg" style="display: inline-block;" class="img-responsive" />
+			</div>
 		</div>
 		
 	</div>
 
-	<div class="row">
-		<div class="col-md-12">
-			
-			<button type="button" class="btn btn-primary btn-lg btn-block">Send me this Wordsearch</button>
-		</div>
-	</div>
+	
 
       <div class="footer">
         <p>&copy; Copyright 2014</p>
