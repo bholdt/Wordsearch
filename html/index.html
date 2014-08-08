@@ -16,20 +16,28 @@
 	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
 	<link href="css/style.css" rel="stylesheet" />
 	<script>
-		var ThemeListViewModel = function() {
-	var self = this;
+	var ThemeListViewModel = function() {
+		var self = this;
+		
+		self.themes = ko.observableArray();
+		self.chosenTheme = ko.observable();
+		
+		self.loadThemes = function() {
+			var firstTheme = new ThemeViewModel(1,'Winter','',['Bobsled','Boots','Coat','Cold','Earmuffs','Fog','Gloves','Ice','Jacket','Scarf','Skate','Ski','Snow','Socks','Sweater','Thermal','Toboggan','Toque','White','Wool'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');			
+			self.themes.push(firstTheme);
+			self.themes.push(new ThemeViewModel(2,'Spring Flowers','', ['Allium','Anemone','Azaleas','Camellia','Chionodoxa','Crocus','Daffodil','Forsythia','Hellebore','Hyacinths','Lilac','Muscari','Pansy','Peonies','Primrose','Rhododendron','Scilla','Snowdrop','Spiraea','Tulip'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Thanksgiving','',['Apple Pie','Black Friday','Cranberry','Dinner','Family','Feast','Football','Native Americans','November','Parade','Pilgrims','Potatoes','Pudding','Pumpkin Pie','Sales','Stuffing','Thanksgiving','Thursday','Turkey','Vacation'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/12/Thanksgiving-Turkey-preview.jpg'));			
+			self.themes.push(new ThemeViewModel(2,'Dreamworks','',['Antz','Bee Movie','Chicken Run','Flushed Away','How To Train Your Dragon','Kung Fu Panda','Madagazcar','Megamind','Monsters vs Aliens','Over The Hedge','The Prince Of Egypt','The Road To ElDorado','Shark Tale','Shrek','Turbo'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/10/Dreamworks-Animated-Films-Preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Walt Disney','',['Aladdin','Bambi','Beauty And The Beast','Bolt','Cinderella','Dinosaur','Dumbo','Fantasia','Hercules','The Jungle Book','The Lion King','The Little Mermaid','Mulan','Pinocchio','Pocahontas','The Rescuers','Robin Hood','Sleeping Beauty','Tangled','Tarzan'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/10/Walt-Disney-Films-Preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Board Games','',['Backgammon','Battleship','Carcassonne','Checkers','Chess','Cluedo','Cranium','Go','Life','Mancala','Mastermind','Monopoly','Othello','Operation','Pictionary','Risk','Scattegories','Scrabble','Sorry','Stratego'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/board-games-preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Languages of the World','',['Arabic','Bengali','English','Farsi','French','German','Hindustani','Japanese','Javanese','Korean','MalayIndonesian','Mandarin','Portugese','Punjabi','Spanish','Tamil','Russian','Urdu','Vietnamese','Wu'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/languages-preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Africa','',['Abu Simbel','Avenue of the Baobabs','Djemaa el Fna','Fish River Canyon','Giza Pyramids','Great Sphinx','Karnak Temples','Kilimanjaro','Maasai Mara','Ngorongoro Crater','Okavango Delta','Robben Island','Serengeti','Sossusvlei','Table Mountain','The Big Hole','Timbuktu','Valley of the Kings','Victoria Falls','Virunga'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/Africa-Preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Cats','',['Abyssinian','Balinese','Bengal','Bobtail','Burmese','Chartreux','Himalayan','Javenese','LaPerm','Longhair','Manx','Munchkin','Napoleon','Ocicat','Persian','Ragamuffin','Rex','Shorthair','Siamese','Siberian'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/Cats-preview.jpg'));
+			self.themes.push(new ThemeViewModel(2,'Computers','',['bluetooth','computer','cpu','disk drive','ethernet','hdd','keyboard','laptop','monitor','motherboard','mouse','personal','processor','software','sound card','speakers','usb','video card','webcam','wifi'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/computers-preview.jpg'));			self.themes.push(new ThemeViewModel(2,'','',[],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
+			self.chosenTheme(firstTheme);
+		};
 	
-	self.themes = ko.observableArray();
-	self.chosenTheme = ko.observable();
-	
-	self.loadThemes = function() {
-		var firstTheme = new ThemeViewModel(1, 'test','',['sdfsd','sadfasdf','asdfasdf'], 'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');
-		self.themes.push(firstTheme);
-		self.themes.push(new ThemeViewModel(2, 'another one','',[],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
-		self.chosenTheme(firstTheme);
-	};
-	
-}
+	}
 
 var ThemeViewModel = function(id, title, description, words, imageUrl){
 	var self = this;
