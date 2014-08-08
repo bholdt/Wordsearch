@@ -23,9 +23,9 @@
 	self.chosenTheme = ko.observable();
 	
 	self.loadThemes = function() {
-		var firstTheme = new ThemeViewModel(1, 'test','',['sdfsd','sadfasdf','asdfasdf']);
+		var firstTheme = new ThemeViewModel(1, 'test','',['sdfsd','sadfasdf','asdfasdf'], 'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');
 		self.themes.push(firstTheme);
-		self.themes.push(new ThemeViewModel(2, 'another one'));
+		self.themes.push(new ThemeViewModel(2, 'another one','',[],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
 		self.chosenTheme(firstTheme);
 	};
 	
@@ -90,10 +90,10 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 		  </div>
         </div>
 		<div class="col-md-7">
-			<div style="text-align: center;">
-				<!-- <img src="http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg" style="display: inline-block;" class="img-responsive" />-->
+			<div style="text-align: center;" data-bind="with: chosenTheme">
+				<!-- <img src="" style="display: inline-block;" class="img-responsive" />-->
 				
-				<img src="http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg" style="display: inline-block;" class="img-responsive" />
+				<img data-bind="attr: {src: imageUrl}" style="display: inline-block;" class="img-responsive" />
 			</div>
 		</div>
 		
