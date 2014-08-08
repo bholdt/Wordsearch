@@ -38,6 +38,14 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 	self.description = ko.observable(description);
 	self.words = ko.observableArray(words);
 	self.imageUrl = ko.observable(imageUrl);
+	self.wordsText = ko.computed({
+        read: function() {
+            return self.words().join('\n');
+        },
+        write: function(value){ 
+			self.words(value.split('\n'));
+		}
+    });
 }
 	</script>
 
@@ -63,7 +71,7 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 	
     <div class="row">
         <div class="col-md-5">
-          <div class="panel panel-info">
+          <div class="panel panel-primary">
 		   <div class="panel-heading">
 				<h3 class="panel-title">Details</h3>
 			</div>
@@ -76,7 +84,8 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 				</div>
 				<div data-bind="with: chosenTheme">
 				<div class="form-group">
-					<textarea rows=15 class="form-control" id="words" placeholder="Enter Words" data-bind="value: words" ></textarea>
+					<textarea rows=15 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText">
+					</textarea>
 				</div>
 				<div class="form-group">
 					<input type="email" class="form-control" id="email" placeholder="Email Address" />
