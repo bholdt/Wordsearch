@@ -96,17 +96,21 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
+					<label>Choose Theme</label>
 					<select class="form-control" data-bind="options: themes,
 						optionsCaption: 'Choose a theme...',
 						optionsText: 'title',
 						value: chosenTheme"></select>
 				</div>
 				<div data-bind="with: chosenTheme">
+
 				<div class="form-group">
-					<textarea rows=15 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText">
+					<label>Words</label>
+					<textarea rows=12 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText">
 					</textarea>
 				</div>
 				<div class="form-group">
+					<label>Send to</label>
 					<input type="email" class="form-control" id="email" placeholder="Email Address" />
 				</div>
 				<input type="hidden" id="themeId" data-bind="value: themeId" />
@@ -118,11 +122,18 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 		  </div>
         </div>
 		<div class="col-md-7">
+			<div class="panel">
+		   <div class="panel-heading">
+				<h3 class="panel-title">Preview</h3>
+			</div>
+			<div class="panel-body">
 			<div style="text-align: center;" data-bind="with: chosenTheme">
 				<!-- <img src="" style="display: inline-block;" class="img-responsive" />-->
 				
 				<img data-bind="attr: {src: imageUrl}" style="display: inline-block;" class="img-responsive" />
 			</div>
+		  </div>
+        </div>
 		</div>
 		
 	</div>
