@@ -21,6 +21,21 @@
 		
 		self.themes = ko.observableArray();
 		self.chosenTheme = ko.observable();
+
+		self.sendWordsearch = function() {
+			//$("#sendButton").disable();
+
+			$.ajax({
+				url: '#',
+				method: 'post'
+			}).done(function(){
+				window.location = 'success.html';
+			}).fail(function(){
+				$("#sendButton").enable();
+				window.location = 'success.html';
+			});
+
+		}
 		
 		self.loadThemes = function() {
 			var firstTheme = new ThemeViewModel(1,'Winter','',['Bobsled','Boots','Coat','Cold','Earmuffs','Fog','Gloves','Ice','Jacket','Scarf','Skate','Ski','Snow','Socks','Sweater','Thermal','Toboggan','Toque','White','Wool'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');			
@@ -115,7 +130,7 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 				</div>
 				<input type="hidden" id="themeId" data-bind="value: themeId" />
 				<div class="form-group">
-					<button class="btn btn-primary form-control">Send Me This Wordsearch</button>
+					<button class="btn btn-primary form-control" id="sendButton" data-bind="click: $parent.sendWordsearch">Send Me This Wordsearch</button>
 				</div>
 				</div>
 			</div>
