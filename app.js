@@ -1,6 +1,7 @@
 var express = require('express');
 var request = require('superagent');
 var bodyParser = require('body-parser');
+var ravendb = require('ravendb');
 var kue = require('kue')
   , jobs = kue.createQueue();
 var wordsearch = require('./wordsearch');
@@ -39,6 +40,12 @@ app.get('/api/wordsearch',function(req, res) {
     var test = JSON.parse(value);
     res.send(test.title);
   });
+
+
+});
+
+app.get('/api/raven', function(req, res) {
+
 
 
 });
