@@ -119,7 +119,7 @@ function generate(data, done){
 
 jobs.process('email', function(job, done){
   var data = job.data;
-  var postmark = require("postmark")("74fe382c-9252-11e3-a73b-0025909414ec");
+  var postmark = require("postmark")(require('./postmarkApiKey'));
   console.log(data.title + data.emailTo + data.file);
   postmark.send({
     "From": "info@wordsearchcreatorhq.com",

@@ -1,5 +1,5 @@
 var data = { emailTo: 'bm.holdt@gmail.com', title: 'Test' };
-var postmark = require("postmark")(require('./apiKeys').postmark);
+var postmark = require("postmark")(require('./postmarkApiKey'));
 console.log(data.title + data.emailTo + data.file);
 postmark.send({
   "From": "info@wordsearchcreatorhq.com",
