@@ -19,23 +19,18 @@ var download = function(uri, filename, callback){
 
 function generate(data, done){
   //load the pattern
-
-  WordSearchTemplate.findOne({ id: data.id }, function(err, wS){
+  WordSearchTemplate.findById(data.id, function(err, wS){
     if(err) throw err;
-    console.log('words: ' + data.words.join(',') + '\r\nPattern:' + wS.Pattern.join('\r\n'));
     superagent
     .post('http://db.wordsearchcreatorhq.com/wordsearch/createwordsearch')
-    .send({ Words: data.words, Pattern: wS.Pattern.join('\r\n') })
+    .send({ Words: data.words, Pattern: wS.pattern.join('\r\n') })
     .set('Accept', 'application/json')
     .end(function(error, res){
-      //console.log(res);
       console.log('downloading picture' + res.body);
-      //download the picture
       download('http://db.wordsearchcreatorhq.com/wsearches/' + res.body + '.png', 'wsearches/' + res.body + '.png', function(){
         console.log('done downloading');
 
-
-        if(wS.PatternHeight > wS.PatternWidth) {
+        if(wS.height > wS.width) {
           // Create a document
           var doc = new PDFDocument();
 
@@ -124,7 +119,7 @@ function generate(data, done){
 
 jobs.process('email', function(job, done){
   var data = job.data;
-  var postmark = require("postmark")('');
+  var postmark = require("postmark")("74fe382c-9252-11e3-a73b-0025909414ec");
   console.log(data.title + data.emailTo + data.file);
   postmark.send({
     "From": "info@wordsearchcreatorhq.com",

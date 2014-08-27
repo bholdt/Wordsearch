@@ -1,1 +1,1 @@
-module.exports = { "postmark": "REPLACE" }
+module.exports = { "postmark": "" }

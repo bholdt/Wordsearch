@@ -3,6 +3,7 @@ logs
 *.log
 
 wsearches/*
+apiKeys.js
 
 # Runtime data
 pids
