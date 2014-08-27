@@ -26,7 +26,7 @@ app.post('/api/wordsearch', function(req, res) {
   words = words.split('\n');
   pattern = pattern.split('\n');
 
-  client.set('wsTheme_' + themeId, {themeId: themeId, pattern: pattern, words: words, title: title});
+  client.set('wsTheme_' + themeId, JSON.stringify({themeId: themeId, pattern: pattern, words: words, title: title}));
 
   res.send("success");
 
@@ -34,8 +34,12 @@ app.post('/api/wordsearch', function(req, res) {
 
 app.get('/api/wordsearch',function(req, res) {
   var themeId = req.query.themeId;
-  
-  res.send(themeId);
+
+  var wordsearch = client.get("wsTheme_" + themeId, function(err, value){
+    var test = JSON.parse(value);
+    res.send(test.title);
+  });
+
 
 });
 

@@ -2,6 +2,8 @@
 logs
 *.log
 
+wsearches/*
+
 # Runtime data
 pids
 *.pid
