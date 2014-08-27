@@ -1,0 +1,23 @@
+{
+  "name": "wordsearch",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.6.5",
+    "express": "~4.2.0",
+    "jasmine-node": "",
+    "kue": "^0.8.5",
+    "mocha": "^1.21.4",
+    "mongoose": "^3.8.15",
+    "pdfkit": "^0.6.3",
+    "redis": "^0.12.1",
+    "request": "^2.40.0",
+    "should": "^4.0.4",
+    "superagent": "",
+    "supertest": "^0.13.0",
+    "winston": "^0.7.3"
+  }
+}
