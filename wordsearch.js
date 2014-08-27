@@ -108,9 +108,28 @@ function generate(data, done){
         doc.end();
       }
 
+      var postmark = require("postmark")("YOURAPIKEY");
+    postmark.send({
+        "From": "info@wordsearchcreatorhq.com",
+        "To": data.email,
+        "Subject": "Wordsearch - " + data.title,
+        "TextBody": "Hey there,\r\n Please find attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. \r\nPlease share.",
+        "Attachments": [{
+          "Content": File.readFileSync("wsearches/" + res.body + ".pdf").toString('base64'),
+          "Name": data.title + ".pdf",
+          "ContentType": "application/pdf"
+        }]
+    }, function(error, success) {
+        if(error) {
+            console.error("Unable to send via postmark: " + error.message);
+            done(error);
+            return;
+        }
+        console.info("Sent to postmark for delivery");
+        done();
+    });
 
-      if(error) done(error);
-      done();
+
     });
 
   });
