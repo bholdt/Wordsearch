@@ -28,12 +28,13 @@
 			$.ajax({
 				url: '/api/wordsearch/generate',
 				method: 'post',
-        data: {themeId: self.chosenTheme().themeId(),
+        contentType: "application/json",
+        data: JSON.stringify({themeId: self.chosenTheme().themeId(),
           title:  self.chosenTheme().title(),
           words: self.chosenTheme().words(),
           email: "test@test.com"
-        }
-			}).done(function(){
+        })
+			}).success(function(){
 				window.location = 'success.html';
 			}).fail(function(){
 				$("#sendButton").enable();
@@ -43,6 +44,15 @@
 		}
 
 		self.loadThemes = function() {
+
+      $.getJSON("/api/wordsearch", function(data) {
+
+        for(var i = 0; i < data.length; i++){
+          var d = data[i];
+          self.themes.push(new ThemeViewModel(d.themeId, d.title, '', d.words, 'test.png'));
+        }
+      });
+/*
 			var firstTheme = new ThemeViewModel(1,'Winter','',['Bobsled','Boots','Coat','Cold','Earmuffs','Fog','Gloves','Ice','Jacket','Scarf','Skate','Ski','Snow','Socks','Sweater','Thermal','Toboggan','Toque','White','Wool'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');
 			self.themes.push(firstTheme);
 			self.themes.push(new ThemeViewModel(2,'Spring Flowers','', ['Allium','Anemone','Azaleas','Camellia','Chionodoxa','Crocus','Daffodil','Forsythia','Hellebore','Hyacinths','Lilac','Muscari','Pansy','Peonies','Primrose','Rhododendron','Scilla','Snowdrop','Spiraea','Tulip'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
@@ -64,8 +74,8 @@
 			self.themes.push(new ThemeViewModel(18,'Space Voyage','',['Almaz','Apollo','Astronauts','Cosmonauts','Explorer','Gemini','ISS','Mariner','Mercury','Mir','NASA','Pioneer','Rocosmos','Salyut','Skylab','Soyuz','Space Shuttle','Sputnik','Vostok','Voyager'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/06/Space-Shuttle-Preview.jpg'));
 			self.themes.push(new ThemeViewModel(19,'Royal Titles','',['emperor','empress','king','queen','prince','princess','archduke','archduchess','duke','duchess','baron','baroness','marquess','marchioness','earl','count','countess','viscount','viscountess','knight'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/06/Royal-Titles-preview.jpg'));
 			self.themes.push(new ThemeViewModel(20,'Football','',['ball','center line','coach','defense','dribble','goal','goalie','football','forwards','half time','kick','linesmen','offense','overtime','penalty','pitch','red card','referee','save','tackle'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/05/football-preview.jpg'));
-
-			self.chosenTheme(firstTheme);
+*/
+			self.chosenTheme(self.themes()[0]);
 		};
 
 	}

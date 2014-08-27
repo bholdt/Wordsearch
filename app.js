@@ -33,19 +33,26 @@ app.post('/api/wordsearch', function(req, res) {
 
 });
 
-app.get('/api/wordsearch',function(req, res) {
-  var themeId = req.query.themeId;
 
-  var wordsearch = client.get("wsTheme_" + themeId, function(err, value){
-    var test = JSON.parse(value);
-    res.send(test.title);
-  });
-
-
-});
-
-app.get('/api/raven', function(req, res) {
-
+app.get('/api/wordsearch', function(req, res) {
+    var wS = require('./data.js').ws;
+  if(req.query.id) {
+    var themeId = req.query.id;
+    res.send(wS[themeId]);
+ }
+ else {
+    var list =[];
+    for (index = 0; index < wS.length; ++index) {
+      var item = wS[index];
+      list.push({
+        themeId: index,
+        title: item.Title,
+        words: item.DefaultWords,
+        image: 'test.png'
+      });
+    }
+    res.send(list);
+ }
 
 
 });

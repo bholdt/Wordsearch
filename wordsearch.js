@@ -21,6 +21,7 @@ function generate(data, done){
 
     var wS = require('./data.js').ws[data.themeId];
 
+  console.log('words: ' + data.words.join(',') + '\r\nPattern:' + wS.Pattern.join('\r\n'));
     superagent
     .post('http://db.wordsearchcreatorhq.com/wordsearch/createwordsearch')
     .send({ Words: data.words, Pattern: wS.Pattern.join('\r\n') })
@@ -52,13 +53,13 @@ function generate(data, done){
           // and some justified text wrapped into columns
           var words = data.words;
           var lineHeight = 3;
-          var columns = 3;
+          var columns = 4;
           doc.text('Words', marginLeft, 550 + marginTop)
-          .fontSize(15)
+          .fontSize(12)
           .moveDown()
           .text(words.join('\n'), {
             width: 412,
-            align: 'justify',
+            align: 'left',
             indent: 30,
             columns: columns,
             lineGap: lineHeight,
@@ -74,7 +75,9 @@ function generate(data, done){
             layout : 'landscape'
           }
         );
-        var stream = doc.pipe(blobStream());
+        //var stream = doc.pipe(blobStream());
+
+        doc.pipe(fs.createWriteStream('wsearches/'+ res.body +'.pdf'));
 
         var marginLeft = 50;
         var marginTop = 50;
@@ -90,11 +93,11 @@ function generate(data, done){
         var lineHeight = 3;
         var columns = 5;
         doc.text('Words', marginLeft, 420 + marginTop)
-        .fontSize(15)
+        .fontSize(12)
         .moveDown()
         .text(words.join('\n'), {
           width: 650,
-          align: 'justify',
+          align: 'left',
           indent: 30,
           columns: columns,
           lineGap: lineHeight,
