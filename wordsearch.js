@@ -29,12 +29,13 @@ function generate(data, done){
       console.log('downloading picture' + res.body);
       download('http://db.wordsearchcreatorhq.com/wsearches/' + res.body + '.png', 'wsearches/' + res.body + '.png', function(){
         console.log('done downloading');
+        var stream;
 
         if(wS.height > wS.width) {
           // Create a document
           var doc = new PDFDocument();
 
-          doc.pipe(fs.createWriteStream('wsearches/'+ res.body +'.pdf'));
+          stream = doc.pipe(fs.createWriteStream('wsearches/'+ res.body +'.pdf'));
 
           var marginLeft = 50;
           var marginTop = 50;
@@ -69,11 +70,10 @@ function generate(data, done){
         else {
           var doc = new PDFDocument({
             layout : 'landscape'
-          }
-        );
+          });
         //var stream = doc.pipe(blobStream());
 
-        doc.pipe(fs.createWriteStream('wsearches/'+ res.body +'.pdf'));
+        stream =  doc.pipe(fs.createWriteStream('wsearches/'+ res.body +'.pdf'));
 
         var marginLeft = 50;
         var marginTop = 50;
@@ -104,8 +104,10 @@ function generate(data, done){
         doc.end();
       }
 
-      jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
-      done();
+      stream.on('finish', function() {
+        jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
+        done();
+      });
 
     });
 
@@ -126,11 +128,11 @@ jobs.process('email', function(job, done){
     "To": data.emailTo,
     "Subject": "Wordsearch - " + data.title,
     "TextBody": "Hey there,\r\n Please find attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. \r\nPlease share.",
-    /*"Attachments": [{
+    "Attachments": [{
       "Content": fs.readFileSync(data.file).toString('base64'),
       "Name": data.title + ".pdf",
       "ContentType": "application/pdf"
-    }]*/
+    }]
   }, function(error, success) {
     if(error) {
       console.error("Unable to send via postmark: " + error.message);
