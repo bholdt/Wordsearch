@@ -50,10 +50,9 @@ function generate(data, done){
           // and some justified text wrapped into columns
           var words = data.words;
           var lineHeight = 3;
-          var columns = 4;
-          doc.text('Words', marginLeft, 550 + marginTop)
+          var columns = 3;
+          doc.text('', marginLeft, 550 + marginTop)
           .fontSize(12)
-          .moveDown()
           .text(words.join('\n'), {
             width: 412,
             align: 'left',
@@ -87,17 +86,17 @@ function generate(data, done){
         // and some justified text wrapped into columns
         var words = data.words;
         var lineHeight = 3;
-        var columns = 5;
-        doc.text('Words', marginLeft, 420 + marginTop)
+        var columns = 4;
+        doc.text(' ', marginLeft, 420 + marginTop)
         .fontSize(12)
-        .moveDown()
+        //.moveDown()
         .text(words.join('\n'), {
           width: 650,
           align: 'left',
           indent: 30,
           columns: columns,
           lineGap: lineHeight,
-          height: 70,
+          height: 80,
           ellipsis: true
         });
 
