@@ -1,9 +1,12 @@
-var redis = require("redis"),
-client = redis.createClient();
+var mongoose = require('mongoose');
 var superagent = require('superagent');
+var WordSearchTemplate = require('./models/WordSearchTemplate');
 var PDFDocument = require('pdfkit');
 var fs = require('fs'),
 request = require('request');
+var kue = require('kue')
+  , jobs = kue.createQueue();
+
 
 var download = function(uri, filename, callback){
   request.head(uri, function(err, res, body){
@@ -16,12 +19,10 @@ var download = function(uri, filename, callback){
 
 function generate(data, done){
   //load the pattern
-  client.get("pattern" + data.themeId, function (err, value){
-    if(err) done(err);
 
-    var wS = require('./data.js').ws[data.themeId];
-
-  console.log('words: ' + data.words.join(',') + '\r\nPattern:' + wS.Pattern.join('\r\n'));
+  WordSearchTemplate.findOne({ id: data.id }, function(err, wS){
+    if(err) throw err;
+    console.log('words: ' + data.words.join(',') + '\r\nPattern:' + wS.Pattern.join('\r\n'));
     superagent
     .post('http://db.wordsearchcreatorhq.com/wordsearch/createwordsearch')
     .send({ Words: data.words, Pattern: wS.Pattern.join('\r\n') })
@@ -108,36 +109,45 @@ function generate(data, done){
         doc.end();
       }
 
-      var postmark = require("postmark")("YOURAPIKEY");
-    postmark.send({
-        "From": "info@wordsearchcreatorhq.com",
-        "To": data.email,
-        "Subject": "Wordsearch - " + data.title,
-        "TextBody": "Hey there,\r\n Please find attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. \r\nPlease share.",
-        "Attachments": [{
-          "Content": File.readFileSync("wsearches/" + res.body + ".pdf").toString('base64'),
-          "Name": data.title + ".pdf",
-          "ContentType": "application/pdf"
-        }]
-    }, function(error, success) {
-        if(error) {
-            console.error("Unable to send via postmark: " + error.message);
-            done(error);
-            return;
-        }
-        console.info("Sent to postmark for delivery");
-        done();
-    });
 
+
+
+      jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
+      done();
 
     });
 
   });
 });
 
-
-//send e-mail
-
 }
+
+
+
+
+jobs.process('email', function(job, done){
+  var data = job.data;
+  var postmark = require("postmark")('');
+  console.log(data.title + data.emailTo + data.file);
+  postmark.send({
+    "From": "info@wordsearchcreatorhq.com",
+    "To": data.emailTo,
+    "Subject": "Wordsearch - " + data.title,
+    "TextBody": "Hey there,\r\n Please find attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. \r\nPlease share.",
+    /*"Attachments": [{
+      "Content": fs.readFileSync(data.file).toString('base64'),
+      "Name": data.title + ".pdf",
+      "ContentType": "application/pdf"
+    }]*/
+  }, function(error, success) {
+    if(error) {
+      console.error("Unable to send via postmark: " + error.message);
+      done(error);
+      return;
+    }
+    console.info("Sent to postmark for delivery");
+    done();
+  });
+});
 
 exports.generate = generate;

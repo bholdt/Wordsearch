@@ -29,10 +29,10 @@
 				url: '/api/wordsearch/generate',
 				method: 'post',
         contentType: "application/json",
-        data: JSON.stringify({themeId: self.chosenTheme().themeId(),
+        data: JSON.stringify({id: self.chosenTheme().themeId(),
           title:  self.chosenTheme().title(),
           words: self.chosenTheme().words(),
-          email: "test@test.com"
+          email: $("#email").val()
         })
 			}).success(function(){
 				window.location = 'success.html';
@@ -49,7 +49,7 @@
 
         for(var i = 0; i < data.length; i++){
           var d = data[i];
-          self.themes.push(new ThemeViewModel(d.themeId, d.title, '', d.words, 'test.png'));
+          self.themes.push(new ThemeViewModel(d.id, d.title, '', d.words, 'test.png'));
         }
       });
 /*

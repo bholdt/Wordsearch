@@ -2,11 +2,16 @@ var express = require('express');
 var request = require('superagent');
 var bodyParser = require('body-parser');
 var ravendb = require('ravendb');
+var mongoose = require('mongoose');
 var kue = require('kue')
-  , jobs = kue.createQueue();
+, jobs = kue.createQueue();
 var wordsearch = require('./wordsearch');
 var redis = require("redis"),
 client = redis.createClient();
+var WordSearchTemplate = require('./models/WordSearchTemplate');
+
+mongoose.connect('mongodb://localhost/wordsearches');
+var db = mongoose.connection;
 
 
 var app = express(); // better instead
@@ -35,24 +40,28 @@ app.post('/api/wordsearch', function(req, res) {
 
 
 app.get('/api/wordsearch', function(req, res) {
-    var wS = require('./data.js').ws;
+
   if(req.query.id) {
-    var themeId = req.query.id;
-    res.send(wS[themeId]);
- }
- else {
+    WordSearchTemplate.findOne({id: req.query.id}, function(err, item){
+      res.send(item);
+    });
+  }
+  else {
     var list =[];
-    for (index = 0; index < wS.length; ++index) {
-      var item = wS[index];
-      list.push({
-        themeId: index,
-        title: item.Title,
-        words: item.DefaultWords,
-        image: 'test.png'
-      });
-    }
-    res.send(list);
- }
+    var items = WordSearchTemplate.find(function(err, items){
+
+      for (index = 0; index < items.length; ++index) {
+        var item = items[index];
+        list.push({
+          id: item.id,
+          title: item.title,
+          words: item.words,
+          image: 'test.png'
+        });
+      }
+      res.send(list);
+    });
+  }
 
 
 });
@@ -68,8 +77,8 @@ app.post('/api/wordsearch/generate', function(req, res){
     email: email,
     themeId: themeId
   }).save( function(err){
-      if( !err ) console.log( job.id );
-        res.send({ 'content': 'Wordsearch is on its way', 'jobId': job.id})
+    if( !err ) console.log( job.id );
+    res.send({ 'content': 'Wordsearch is on its way', 'jobId': job.id})
   });
 
 });
