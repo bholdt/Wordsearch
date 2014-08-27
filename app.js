@@ -24,20 +24,6 @@ app.use(function(err, req, res, next){
   res.send(500, 'Something broke!');
 });
 
-app.post('/api/wordsearch', function(req, res) {
-  var themeId = req.body.themeId,
-  pattern = req.body.pattern,
-  words = req.body.words,
-  title = req.body.title;
-  words = words.split('\n');
-  pattern = pattern.split('\n');
-
-  client.set('wsTheme_' + themeId, JSON.stringify({themeId: themeId, pattern: pattern, words: words, title: title}));
-
-  res.send("success");
-
-});
-
 
 app.get('/api/wordsearch', function(req, res) {
 
@@ -67,7 +53,7 @@ app.get('/api/wordsearch', function(req, res) {
 });
 
 app.post('/api/wordsearch/generate', function(req, res){
-  var themeId = req.body.themeId,
+  var id = req.body.id,
   title = req.body.title,
   words = req.body.words,
   email = req.body.email;
@@ -75,7 +61,7 @@ app.post('/api/wordsearch/generate', function(req, res){
     title: title,
     words: words,
     email: email,
-    themeId: themeId
+    id: id
   }).save( function(err){
     if( !err ) console.log( job.id );
     res.send({ 'content': 'Wordsearch is on its way', 'jobId': job.id})

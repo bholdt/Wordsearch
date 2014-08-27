@@ -23,8 +23,6 @@
 		self.chosenTheme = ko.observable();
 
 		self.sendWordsearch = function() {
-			//$("#sendButton").disable();
-
 			$.ajax({
 				url: '/api/wordsearch/generate',
 				method: 'post',
@@ -52,29 +50,7 @@
           self.themes.push(new ThemeViewModel(d.id, d.title, '', d.words, 'test.png'));
         }
       });
-/*
-			var firstTheme = new ThemeViewModel(1,'Winter','',['Bobsled','Boots','Coat','Cold','Earmuffs','Fog','Gloves','Ice','Jacket','Scarf','Skate','Ski','Snow','Socks','Sweater','Thermal','Toboggan','Toque','White','Wool'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Winter-Play.jpg');
-			self.themes.push(firstTheme);
-			self.themes.push(new ThemeViewModel(2,'Spring Flowers','', ['Allium','Anemone','Azaleas','Camellia','Chionodoxa','Crocus','Daffodil','Forsythia','Hellebore','Hyacinths','Lilac','Muscari','Pansy','Peonies','Primrose','Rhododendron','Scilla','Snowdrop','Spiraea','Tulip'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2014/04/Spring-Flowers-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(3,'Thanksgiving','',['Apple Pie','Black Friday','Cranberry','Dinner','Family','Feast','Football','Native Americans','November','Parade','Pilgrims','Potatoes','Pudding','Pumpkin Pie','Sales','Stuffing','Thanksgiving','Thursday','Turkey','Vacation'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/12/Thanksgiving-Turkey-preview.jpg'));
-			self.themes.push(new ThemeViewModel(4,'Dreamworks','',['Antz','Bee Movie','Chicken Run','Flushed Away','How To Train Your Dragon','Kung Fu Panda','Madagazcar','Megamind','Monsters vs Aliens','Over The Hedge','The Prince Of Egypt','The Road To ElDorado','Shark Tale','Shrek','Turbo'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/10/Dreamworks-Animated-Films-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(5,'Walt Disney','',['Aladdin','Bambi','Beauty And The Beast','Bolt','Cinderella','Dinosaur','Dumbo','Fantasia','Hercules','The Jungle Book','The Lion King','The Little Mermaid','Mulan','Pinocchio','Pocahontas','The Rescuers','Robin Hood','Sleeping Beauty','Tangled','Tarzan'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/10/Walt-Disney-Films-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(6,'Board Games','',['Backgammon','Battleship','Carcassonne','Checkers','Chess','Cluedo','Cranium','Go','Life','Mancala','Mastermind','Monopoly','Othello','Operation','Pictionary','Risk','Scattegories','Scrabble','Sorry','Stratego'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/board-games-preview.jpg'));
-			self.themes.push(new ThemeViewModel(7,'Languages of the World','',['Arabic','Bengali','English','Farsi','French','German','Hindustani','Japanese','Javanese','Korean','MalayIndonesian','Mandarin','Portugese','Punjabi','Spanish','Tamil','Russian','Urdu','Vietnamese','Wu'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/languages-preview.jpg'));
-			self.themes.push(new ThemeViewModel(8,'Africa','',['Abu Simbel','Avenue of the Baobabs','Djemaa el Fna','Fish River Canyon','Giza Pyramids','Great Sphinx','Karnak Temples','Kilimanjaro','Maasai Mara','Ngorongoro Crater','Okavango Delta','Robben Island','Serengeti','Sossusvlei','Table Mountain','The Big Hole','Timbuktu','Valley of the Kings','Victoria Falls','Virunga'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/09/Africa-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(9,'Cats','',['Abyssinian','Balinese','Bengal','Bobtail','Burmese','Chartreux','Himalayan','Javenese','LaPerm','Longhair','Manx','Munchkin','Napoleon','Ocicat','Persian','Ragamuffin','Rex','Shorthair','Siamese','Siberian'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/Cats-preview.jpg'));
-			self.themes.push(new ThemeViewModel(10,'Computers','',['bluetooth','computer','cpu','disk drive','ethernet','hdd','keyboard','laptop','monitor','motherboard','mouse','personal','processor','software','sound card','speakers','usb','video card','webcam','wifi'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/computers-preview.jpg'));
-			self.themes.push(new ThemeViewModel(11,'The Avengers','',['Black Widow','Bruce Banner','Captain America','Clint Barton','Hawkeye','Hulk','Iron Man','Maria Hill','Natasha Romanoff','Nick Fury','Phil Coulson','SHIELD','Steve Rogers','Thor','Tony Stark'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/Avengers.jpg'));
-			self.themes.push(new ThemeViewModel(12,'Donald Duck','',['Abner','Cuthbert','Daphne','Della','Dewey','Donald','Eider','Fanny','Fethry','Gladstone','Goostave','Gus','Hortense','Huey','Louie','Luke','Lulubelle','Matilda','Quackmore','Scrooge'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/08/Donald-Duck-Family-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(13,'The Castles of Germany','',['Babelsburg','Berwartstein','Braunfels','Drachenburg','Eltz','Falkenstein','Glucksburg','Gudenau','Hohenzollern','Marienburg','Mespelbrunn','Neuerburg','Neuschwanstein','Randeck','Reichsburg','Schonburg','Schwerin','Vischering','Wartburg','Wernigerode'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/07/Castles-of-Germany-preview.jpg'));
-			self.themes.push(new ThemeViewModel(14,'Grammy Songs of the Years','',['Beautiful Day','Bette Davis Eyes','Change The World','Daughters','Fallin','From A Distance','Games People Play','Michelle','Moon River','Need You Now','Rehab','Sailing','Smooth','Somewhere Out There','Sunny Came Home','Tears in Heaven','Unforgettable','Viva la Vida','Volare','We Are Young'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/07/Grammy-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(15,'Bastille Day','',['Balls','Bastille','Concerts','Equality','Fireworks','France','Fraternity','July','Liberty','Louis','Marseillaise','Monarchy','Parade','Paris','Phrygian','Prison','Republic','Revolution','Tricolor','Versailles'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/07/Bastille-Day-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(16,'US Independence Day','',['baseball','bonfires','Britain','colonies','declaration','fireworks','flag','freedom','fourth','hotdog','independence','July','parade','patriots','picnic','race','revolution','stars','stripes','USA'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/07/US-Independence-Day-preview.jpg'));
-			self.themes.push(new ThemeViewModel(17,'Clouds','',['billow','cirrus','contrails','cumulus','fibratus','humilis','lenticularis','mammatus','mediocris','nebulosus','nimbus','pileus','spissatus','stratus','uncinus'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/07/clouds-preview.jpg'));
-			self.themes.push(new ThemeViewModel(18,'Space Voyage','',['Almaz','Apollo','Astronauts','Cosmonauts','Explorer','Gemini','ISS','Mariner','Mercury','Mir','NASA','Pioneer','Rocosmos','Salyut','Skylab','Soyuz','Space Shuttle','Sputnik','Vostok','Voyager'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/06/Space-Shuttle-Preview.jpg'));
-			self.themes.push(new ThemeViewModel(19,'Royal Titles','',['emperor','empress','king','queen','prince','princess','archduke','archduchess','duke','duchess','baron','baroness','marquess','marchioness','earl','count','countess','viscount','viscountess','knight'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/06/Royal-Titles-preview.jpg'));
-			self.themes.push(new ThemeViewModel(20,'Football','',['ball','center line','coach','defense','dribble','goal','goalie','football','forwards','half time','kick','linesmen','offense','overtime','penalty','pitch','red card','referee','save','tackle'],'http://www.wordsearchcreatorhq.com/wp-content/uploads/2013/05/football-preview.jpg'));
-*/
+
 			self.chosenTheme(self.themes()[0]);
 		};
 

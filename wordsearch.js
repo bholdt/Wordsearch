@@ -109,9 +109,6 @@ function generate(data, done){
         doc.end();
       }
 
-
-
-
       jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
       done();
 
