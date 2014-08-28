@@ -3,11 +3,7 @@ var request = require('superagent');
 var bodyParser = require('body-parser');
 var ravendb = require('ravendb');
 var mongoose = require('mongoose');
-var kue = require('kue')
-, jobs = kue.createQueue();
 var wordsearch = require('./wordsearch');
-var redis = require("redis"),
-client = redis.createClient();
 var WordSearchTemplate = require('./models/WordSearchTemplate');
 
 mongoose.connect('mongodb://localhost/wordsearches');
@@ -57,22 +53,16 @@ app.post('/api/wordsearch/generate', function(req, res){
   title = req.body.title,
   words = req.body.words,
   email = req.body.email;
-  var job = jobs.create('generateWordsearch', {
+
+  wordsearch.generate({
     title: title,
     words: words,
     email: email,
     id: id
-  }).save( function(err){
-    if( !err ) console.log( job.id );
+  }, function(){
     res.send({ 'content': 'Wordsearch is on its way', 'jobId': job.id})
-  });
+  })
 
-});
-
-
-
-jobs.process('generateWordsearch', function(job, done){
-  wordsearch.generate(job.data, done);
 });
 
 app.listen(3000);

@@ -4,9 +4,6 @@ var WordSearchTemplate = require('./models/WordSearchTemplate');
 var PDFDocument = require('pdfkit');
 var fs = require('fs'),
 request = require('request');
-var kue = require('kue')
-  , jobs = kue.createQueue();
-
 
 var download = function(uri, filename, callback){
   request.head(uri, function(err, res, body){
@@ -104,8 +101,10 @@ function generate(data, done){
       }
 
       stream.on('finish', function() {
-        jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
-        done();
+        //jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
+          emailWordsearch({title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}, function(){
+            console.log('done')
+          })
       });
 
     });
@@ -116,9 +115,8 @@ function generate(data, done){
 }
 
 
+var emailWordsearch = function(data, done){
 
-
-jobs.process('email', function(job, done){
   var data = job.data;
   var postmark = require("postmark")(require('./postmarkApiKey'));
   console.log(data.title + data.emailTo + data.file);
@@ -135,12 +133,13 @@ jobs.process('email', function(job, done){
   }, function(error, success) {
     if(error) {
       console.error("Unable to send via postmark: " + error.message);
-      done(error);
+      done();
       return;
     }
     console.info("Sent to postmark for delivery");
     done();
   });
-});
+}
+
 
 exports.generate = generate;
