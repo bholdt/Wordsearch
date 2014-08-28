@@ -52,7 +52,7 @@ function generate(data, done){
           var lineHeight = 3;
           var columns = 3;
           doc.text('', marginLeft, 550 + marginTop)
-          .fontSize(12)
+          .fontSize(10)
           .text(words.join('\n'), {
             width: 412,
             align: 'left',
@@ -88,7 +88,7 @@ function generate(data, done){
         var lineHeight = 3;
         var columns = 4;
         doc.text(' ', marginLeft, 420 + marginTop)
-        .fontSize(12)
+        .fontSize(10)
         //.moveDown()
         .text(words.join('\n'), {
           width: 650,
@@ -126,7 +126,7 @@ jobs.process('email', function(job, done){
     "From": "info@wordsearchcreatorhq.com",
     "To": data.emailTo,
     "Subject": "Wordsearch - " + data.title,
-    "TextBody": "Hey there,\r\n Please find attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. \r\nPlease share.",
+    "TextBody": "Hi there,\r\n\r\nFind attached your wordsearch that you generated on http://www.wordsearchcreatorhq.com. Please share with as many friends as you like!\r\n\r\nEnjoy the search for words!\r\n\r\nKind Regards\r\nBjorn Holdt",
     "Attachments": [{
       "Content": fs.readFileSync(data.file).toString('base64'),
       "Name": data.title + ".pdf",
