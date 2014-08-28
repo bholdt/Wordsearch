@@ -14,6 +14,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<script>
 	var ThemeListViewModel = function() {
@@ -23,6 +25,11 @@
 		self.chosenTheme = ko.observable();
 
 		self.sendWordsearch = function() {
+      var email = $("#email").val();
+      if(! email){
+        toastr.error('Please enter an email address');
+        return;
+      }
 			$.ajax({
 				url: '/api/wordsearch/generate',
 				method: 'post',
@@ -41,7 +48,22 @@
 
 		}
 
-		self.loadThemes = function() {
+    self.chooseTheme = function(theme) {
+      self.chosenTheme(theme);
+      $("#something").modal('hide');
+    }
+
+    self.chooseThemeById = function(id){
+      ko.utils.arrayForEach(self.themes(), function(theme){
+        console.log(id);
+        if(theme.themeId() == id){
+          self.chooseTheme(theme);
+          console.log(id);
+        }
+      });
+    }
+
+		self.loadThemes = function(done) {
 
       $.getJSON("/api/wordsearch", function(data) {
 
@@ -49,9 +71,10 @@
           var d = data[i];
           self.themes.push(new ThemeViewModel(d.id, d.title, '', d.words, 'test.png'));
         }
+			  self.chosenTheme(self.themes()[0]);
+        if(done) done();
       });
 
-			self.chosenTheme(self.themes()[0]);
 		};
 
 	}
@@ -63,6 +86,9 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 	self.description = ko.observable(description);
 	self.words = ko.observableArray(words);
 	self.imageUrl = ko.observable(imageUrl);
+  self.thumbNailImage = ko.computed(function(){
+    return '/images/thumb' + self.themeId() + '.png';
+  });
 	self.wordsText = ko.computed({
         read: function() {
             return self.words().join('\n');
@@ -72,18 +98,24 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 		}
     });
 }
+
+var themeChoice = function() {
+
+  $("#something").modal();
+
+}
 	</script>
 
     </head>
 
   <body>
 
+
     <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="/index.html">Home</a></li>
+          <li class="active"><a href="/create.html">Create</a></li>
         </ul>
         <h3 class="text-muted">Word Search Creator</h3>
       </div>
@@ -94,6 +126,31 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 		</div>
 	</div>
 
+  <div id="somethin">
+      <div id="something" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Choose a Theme</h4>
+        </div>
+        <div class="modal-body" >
+          <div class="row fluid" data-bind="foreach: themes">
+            <div class="col-sm-4" style="width: 120px; height: 120px; text-align: center;">
+          <a href="#" data-bind="click: $parent.chooseTheme">
+          <img data-bind="attr : { src:  thumbNailImage, alt: title}" width="100%" /><br/>
+          </a>
+        </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  </div>
+
     <div class="row">
         <div class="col-md-5">
           <div class="panel panel-primary">
@@ -101,16 +158,21 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 				<h3 class="panel-title">Details</h3>
 			</div>
 			<div class="panel-body">
-				<div class="form-group">
-					<label>Choose Theme</label>
-					<select class="form-control" data-bind="options: themes,
-						optionsCaption: 'Choose a theme...',
-						optionsText: 'title',
-						value: chosenTheme"></select>
-				</div>
 				<div data-bind="with: chosenTheme">
 
 				<div class="form-group">
+					<label>Choose Theme</label><br/>
+					<!-- <select class="form-control" data-bind="options: themes,
+						optionsCaption: 'Choose a theme...',
+						optionsText: 'title',
+						value: chosenTheme"></select> -->
+            <span data-bind="text: title"></span> <input type="button" onclick="themeChoice(); return false;" class="btn btn-info" value="Change" />
+				</div>
+				<div class="form-group">
+      <label>Title</label>
+      <input class="form-control" type="text" data-bind="value: title" />
+    </div>
+        <div class="form-group">
 					<label>Words</label>
 					<textarea rows=12 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText">
 					</textarea>
@@ -128,16 +190,21 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 		  </div>
         </div>
 		<div class="col-md-7">
-			<div class="panel">
+			<div class="panel panel-info" data-bind="with: chosenTheme">
 		   <div class="panel-heading">
-				<h3 class="panel-title">Preview</h3>
+				<h3 class="panel-title" data-bind="text: title"></h3>
 			</div>
 			<div class="panel-body">
-			<div style="text-align: center;" data-bind="with: chosenTheme">
-				<!-- <img src="" style="display: inline-block;" class="img-responsive" />-->
-
-				<img data-bind="attr: {src: imageUrl}" style="display: inline-block;" class="img-responsive" />
+			<div >
+				<img style="text-align: center; margin: 10px; padding: 10px;" data-bind="attr: {src: thumbNailImage }" style="display: inline-block;" class="img-responsive" />
 			</div>
+
+      <div class="row fluid" data-bind="foreach: words">
+        <div class="col-sm-4 col-md-4">
+          <span data-bind="text: $data"></span>
+        </div>
+      </div>
+
 		  </div>
         </div>
 		</div>
@@ -154,9 +221,27 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 
 
     	<script>
+      $(document).ready(function(){
     var vm = new ThemeListViewModel()
 	ko.applyBindings(vm);
-	vm.loadThemes();
+	vm.loadThemes(function(){
+
+  if(getParameterByName('id')){
+    vm.chooseThemeById(getParameterByName('id'));
+    console.log(getParameterByName('id'));
+  } else {
+    $("#something").modal();
+  }
+  });
+
+  });
+
+  function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 </script>
   </body>
 </html>

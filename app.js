@@ -34,7 +34,7 @@ app.get('/api/wordsearch', function(req, res) {
   }
   else {
     var list =[];
-    var items = WordSearchTemplate.find(function(err, items){
+    WordSearchTemplate.find(function(err, items){
 
       for (index = 0; index < items.length; ++index) {
         var item = items[index];
