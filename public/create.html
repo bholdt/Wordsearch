@@ -55,10 +55,8 @@
 
     self.chooseThemeById = function(id){
       ko.utils.arrayForEach(self.themes(), function(theme){
-        console.log(id);
         if(theme.themeId() == id){
           self.chooseTheme(theme);
-          console.log(id);
         }
       });
     }
@@ -227,9 +225,7 @@ var themeChoice = function() {
 
   if(getParameterByName('id')){
     vm.chooseThemeById(getParameterByName('id'));
-    //console.log(getParameterByName('id'));
   } else {
-    //$("#something").modal();
   }
   });
 

@@ -60,8 +60,8 @@ app.post('/api/wordsearch/generate', function(req, res){
     email: email,
     id: id
   }, function(){
-    res.send({ 'content': 'Wordsearch is on its way', 'jobId': job.id})
   })
+    res.send({ 'content': 'Wordsearch is on its way'})
 
 });
 

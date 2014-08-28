@@ -101,7 +101,6 @@ function generate(data, done){
       }
 
       stream.on('finish', function() {
-        //jobs.create('email', {title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}).save();
           emailWordsearch({title: data.title, file: 'wsearches/'+ res.body + '.pdf', emailTo: data.email}, function(){
             console.log('done')
           })
@@ -117,7 +116,6 @@ function generate(data, done){
 
 var emailWordsearch = function(data, done){
 
-  var data = job.data;
   var postmark = require("postmark")(require('./postmarkApiKey'));
   console.log(data.title + data.emailTo + data.file);
   postmark.send({
