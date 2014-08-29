@@ -3,6 +3,7 @@ logs
 *.log
 
 wsearches/*
+public/wsearches/*
 postmarkApiKey.js
 
 # Runtime data
