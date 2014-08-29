@@ -18,75 +18,15 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<script>
-	var ThemeListViewModel = function() {
-		var self = this;
 
-		self.themes = ko.observableArray();
-		self.chosenTheme = ko.observable();
-
-		self.sendWordsearch = function() {
-      var email = $("#email").val();
-      if(! email){
-        toastr.error('Please enter an email address');
-        return;
-      }
-			$.ajax({
-				url: '/api/wordsearch/generate',
-				method: 'post',
-        contentType: "application/json",
-        data: JSON.stringify({id: self.chosenTheme().themeId(),
-          title:  self.chosenTheme().title(),
-          words: self.chosenTheme().words(),
-          email: $("#email").val()
-        })
-			}).success(function(){
-				window.location = 'success.html';
-			}).fail(function(){
-				$("#sendButton").enable();
-				window.location = 'success.html';
-			});
-
-		}
-
-    self.chooseTheme = function(theme) {
-      self.chosenTheme(theme);
-      $("#something").modal('hide');
-    }
-
-    self.chooseThemeById = function(id){
-      ko.utils.arrayForEach(self.themes(), function(theme){
-        if(theme.themeId() == id){
-          self.chooseTheme(theme);
-        }
-      });
-    }
-
-		self.loadThemes = function(done) {
-
-      $.getJSON("/api/wordsearch", function(data) {
-
-        for(var i = 0; i < data.length; i++){
-          var d = data[i];
-          self.themes.push(new ThemeViewModel(d.id, d.title, '', d.words, 'test.png'));
-        }
-			  self.chosenTheme(self.themes()[0]);
-        if(done) done();
-      });
-
-		};
-
-	}
-
-var ThemeViewModel = function(id, title, description, words, imageUrl){
+var ThemeViewModel = function(id, title, description, words){
 	var self = this;
 	self.themeId = ko.observable(id);
 	self.title = ko.observable(title);
 	self.description = ko.observable(description);
 	self.words = ko.observableArray(words);
-	self.imageUrl = ko.observable(imageUrl);
-  self.thumbNailImage = ko.computed(function(){
-    return '/images/thumb' + self.themeId() + '.png';
-  });
+	self.imageUrl = ko.observable('/images/thumb' + id + '.png');
+
 	self.wordsText = ko.computed({
         read: function() {
             return self.words().join('\n');
@@ -95,13 +35,45 @@ var ThemeViewModel = function(id, title, description, words, imageUrl){
 			self.words(value.split('\n'));
 		}
     });
+
+    self.sendWordsearch = function() {
+      var email = $("#email").val();
+      if(! email){
+        toastr.error('Please enter an email address');
+        return;
+      }
+      $.ajax({
+        url: '/api/wordsearch/generate',
+        method: 'post',
+        contentType: "application/json",
+        data: JSON.stringify({id: self.themeId(),
+          title:  self.title(),
+          words: self.words(),
+          email: $("#email").val()
+        })
+      }).success(function(){
+        window.location = 'success.html';
+      }).fail(function(){
+        $("#sendButton").enable();
+        window.location = 'success.html';
+      });
+
+    }
+
+
+
+
 }
 
-var themeChoice = function() {
+var loadTheme = function(id, done) {
+  $.getJSON("/api/wordsearch?id=" + id, function(d) {
+    var theme = new ThemeViewModel(id, d.title, '', d.words);
+    done(theme);
+  });
 
-  $("#something").modal();
+};
 
-}
+
 	</script>
 
     </head>
@@ -123,77 +95,15 @@ var themeChoice = function() {
 		</div>
 	</div>
 
-  <div id="somethin">
-      <div id="something" class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title">Choose a Theme</h4>
-        </div>
-        <div class="modal-body" >
-          <div class="row fluid" data-bind="foreach: themes">
-            <div class="col-sm-4" style="width: 120px; height: 120px; text-align: center;">
-          <a href="#" data-bind="click: $parent.chooseTheme">
-          <img data-bind="attr : { src:  thumbNailImage, alt: title}" width="100%" /><br/>
-          </a>
-        </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-  </div>
-
     <div class="row">
-        <div class="col-md-5">
-          <div class="panel panel-primary">
-		   <div class="panel-heading">
-				<h3 class="panel-title">Details</h3>
-			</div>
-			<div class="panel-body">
-				<div data-bind="with: chosenTheme">
-
-				<div class="form-group">
-					<label>Choose Theme</label><br/>
-					<!-- <select class="form-control" data-bind="options: themes,
-						optionsCaption: 'Choose a theme...',
-						optionsText: 'title',
-						value: chosenTheme"></select> -->
-            <span data-bind="text: title"></span> <input type="button" onclick="themeChoice(); return false;" class="btn btn-info" value="Change" />
-				</div>
-				<div class="form-group">
-      <label>Title</label>
-      <input class="form-control" type="text" data-bind="value: title" />
-    </div>
-        <div class="form-group">
-					<label>Words</label>
-					<textarea rows=12 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText">
-					</textarea>
-				</div>
-				<div class="form-group">
-					<label>Send to</label>
-					<input type="email" class="form-control" id="email" placeholder="Email Address" />
-				</div>
-				<input type="hidden" id="themeId" data-bind="value: themeId" />
-				<div class="form-group">
-					<button class="btn btn-primary form-control" id="sendButton" data-bind="click: $parent.sendWordsearch">Send Me This Wordsearch</button>
-				</div>
-				</div>
-			</div>
-		  </div>
-        </div>
 		<div class="col-md-7">
-			<div class="panel panel-info" data-bind="with: chosenTheme">
+			<div class="panel panel-info">
 		   <div class="panel-heading">
 				<h3 class="panel-title" data-bind="text: title"></h3>
 			</div>
 			<div class="panel-body">
 			<div >
-				<img style="text-align: center; margin: 10px; padding: 10px;" data-bind="attr: {src: thumbNailImage }" style="display: inline-block;" class="img-responsive" />
+				<img style="text-align: center; margin: 10px; padding: 10px;" data-bind="attr: {src: imageUrl }" style="display: inline-block;" class="img-responsive" />
 			</div>
 
       <div class="row fluid" data-bind="foreach: words">
@@ -205,6 +115,33 @@ var themeChoice = function() {
 		  </div>
         </div>
 		</div>
+    <div class="col-md-5">
+      <div class="panel panel-primary">
+   <div class="panel-heading">
+    <h3 class="panel-title">Customize the Wordsearch</h3>
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+  <label>Title</label>
+  <input class="form-control" type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" />
+</div>
+    <div class="form-group">
+      <label>Words</label>
+      <textarea rows=12 class="form-control" id="words" placeholder="Enter Words" data-bind="value: wordsText, valueUpdate: 'afterkeydown'">
+      </textarea>
+    </div>
+    <div class="form-group">
+      <label>Send to</label>
+      <input type="email" class="form-control" id="email" placeholder="Email Address" />
+    </div>
+    <input type="hidden" id="themeId" data-bind="value: themeId" />
+    <div class="form-group">
+      <button class="btn btn-primary form-control" id="sendButton" data-bind="click: sendWordsearch">Send Me This Wordsearch</button>
+    </div>
+  </div>
+  </div>
+    </div>
+
 
 	</div>
 
@@ -219,14 +156,10 @@ var themeChoice = function() {
 
     	<script>
       $(document).ready(function(){
-    var vm = new ThemeListViewModel()
-	ko.applyBindings(vm);
-	vm.loadThemes(function(){
-
-  if(getParameterByName('id')){
-    vm.chooseThemeById(getParameterByName('id'));
-  } else {
-  }
+  var id = getParameterByName('id');
+  if(! id) window.location = '/';
+	loadTheme(id, function(vm){
+	   ko.applyBindings(vm);
   });
 
   });

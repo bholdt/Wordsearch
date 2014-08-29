@@ -24,7 +24,7 @@ app.use(function(err, req, res, next){
 app.get('/api/wordsearch', function(req, res) {
 
   if(req.query.id) {
-    WordSearchTemplate.findOne({id: req.query.id}, function(err, item){
+    WordSearchTemplate.findById(req.query.id, function(err, item){
       res.send(item);
     });
   }
